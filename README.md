@@ -12,16 +12,7 @@ Install the latest stable release through an OS-neutral URL with one command:
 curl -fsSL https://github.com/alvins82/CasaOS-Install/releases/latest/download/install.sh | sudo bash
 ```
 
-This installs the full fork release, including all Docker compatibility fixes. For detached checksum verification, download and verify the installer before running it as root:
-
-```bash
-curl -fL -o install.sh \
-  https://github.com/alvins82/CasaOS-Install/releases/latest/download/install.sh
-curl -fL -o install.sh.sha256 \
-  https://github.com/alvins82/CasaOS-Install/releases/latest/download/install.sh.sha256
-sha256sum --check install.sh.sha256
-sudo bash install.sh
-```
+This installs the full fork release, including all Docker compatibility fixes.
 
 Supported installer architectures are amd64, arm64, and arm/v7.
 
