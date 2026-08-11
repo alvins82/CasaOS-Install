@@ -1,16 +1,16 @@
-# CasaOS for Ubuntu 26
+# CasaOS Installer
 
-This fork packages the Ubuntu 26 compatibility work from the CasaOS component forks, including the Docker v26 AppManagement client fix and silent `resolute` setup fallback.
+This fork preserves the normal CasaOS installer behavior for supported Linux systems while adding the Docker compatibility and Ubuntu 26 `resolute` fixes from the CasaOS component forks. Ubuntu 26 is supported; it is not required.
 
 ## Install
 
-The recommended installation downloads the immutable release script and verifies it before running as root:
+The recommended installation follows the current stable release through an OS-neutral URL and verifies it before running as root:
 
 ```bash
 curl -fL -o install.sh \
-  https://github.com/alvins82/CasaOS-Install/releases/download/v0.4.17-ubuntu26.2/install.sh
+  https://github.com/alvins82/CasaOS-Install/releases/latest/download/install.sh
 curl -fL -o install.sh.sha256 \
-  https://github.com/alvins82/CasaOS-Install/releases/download/v0.4.17-ubuntu26.2/install.sh.sha256
+  https://github.com/alvins82/CasaOS-Install/releases/latest/download/install.sh.sha256
 sha256sum --check install.sh.sha256
 sudo bash install.sh
 ```
@@ -18,7 +18,7 @@ sudo bash install.sh
 For a disposable test machine, the shorter form is:
 
 ```bash
-curl -fsSL https://github.com/alvins82/CasaOS-Install/releases/download/v0.4.17-ubuntu26.2/install.sh | sudo bash
+curl -fsSL https://github.com/alvins82/CasaOS-Install/releases/latest/download/install.sh | sudo bash
 ```
 
 Supported installer architectures are amd64, arm64, and arm/v7.
