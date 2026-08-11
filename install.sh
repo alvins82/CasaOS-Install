@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 #
-#           CasaOS Installer Script v0.4.17
-#   GitHub: https://github.com/IceWhaleTech/CasaOS
-#   Issues: https://github.com/IceWhaleTech/CasaOS/issues
+#       CasaOS Ubuntu 26 Installer v0.4.17-ubuntu26.1
+#   GitHub: https://github.com/alvins82/get
+#   Issues: https://github.com/alvins82/get/issues
 #   Requires: bash, mv, rm, tr, grep, sed, curl/wget, tar, smartmontools, parted, ntfs-3g, net-tools
 #
 #   This script installs CasaOS to your system.
@@ -78,6 +78,13 @@ readonly CASA_CONF_PATH=/etc/casaos/gateway.ini
 readonly CASA_UNINSTALL_URL="https://get.casaos.io/uninstall/v0.4.16"
 readonly CASA_UNINSTALL_PATH=/usr/bin/casaos-uninstall
 readonly CASAOS_APP_MANAGEMENT_VERSION="v0.4.17"
+readonly CASAOS_FORK_RELEASE_TAG="v0.4.17-ubuntu26.1"
+readonly CASAOS_FORK_RELEASE_BASE_URL="https://github.com/alvins82/get/releases/download/${CASAOS_FORK_RELEASE_TAG}"
+readonly CASAOS_UBUNTU26_OVERLAY_FILE="linux-zz-casaos-ubuntu26-overlay-${CASAOS_FORK_RELEASE_TAG}.tar.gz"
+readonly CASAOS_APP_MANAGEMENT_SHA256_AMD64="4d33403398842faaa00ac06feccf288a7f710e0163f549201f57703edf02ed11"
+readonly CASAOS_APP_MANAGEMENT_SHA256_ARM64="f147322581557ae3a471e6cbeb0ef517291da8f9b5d6baaf677b2f1ede4b36a1"
+readonly CASAOS_APP_MANAGEMENT_SHA256_ARM7="459f17debc8090e5ce5f02dbfa5d7228e1dc6bdf3de23e02ff303657be3c03b1"
+readonly CASAOS_UBUNTU26_OVERLAY_SHA256="b611068474e34cdc4107c3683adfafeef927829377d03bb1f8f7a0cfd89fe1be"
 
 # REQUIREMENTS CONF PATH
 # Udevil
@@ -100,6 +107,7 @@ readonly GREEN_SEPARATOR="${aCOLOUR[0]}:$COLOUR_RESET"
 
 # CASAOS VARIABLES
 TARGET_ARCH=""
+CASAOS_APP_MANAGEMENT_SHA256=""
 TMP_ROOT=/tmp/casaos-installer
 REGION="UNKNOWN"
 CASA_DOWNLOAD_DOMAIN="https://github.com/"
@@ -202,12 +210,15 @@ Check_Arch() {
     case $UNAME_M in
     *aarch64*)
         TARGET_ARCH="arm64"
+        CASAOS_APP_MANAGEMENT_SHA256="${CASAOS_APP_MANAGEMENT_SHA256_ARM64}"
         ;;
     *64*)
         TARGET_ARCH="amd64"
+        CASAOS_APP_MANAGEMENT_SHA256="${CASAOS_APP_MANAGEMENT_SHA256_AMD64}"
         ;;
     *armv7*)
         TARGET_ARCH="arm-7"
+        CASAOS_APP_MANAGEMENT_SHA256="${CASAOS_APP_MANAGEMENT_SHA256_ARM7}"
         ;;
     *)
         Show 1 "Aborted, unsupported or unknown architecture: $UNAME_M"
@@ -220,11 +231,12 @@ Check_Arch() {
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-MessageBus/releases/download/v0.4.4-3-alpha2/linux-${TARGET_ARCH}-casaos-message-bus-v0.4.4-3-alpha2.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-UserService/releases/download/v0.4.8/linux-${TARGET_ARCH}-casaos-user-service-v0.4.8.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-LocalStorage/releases/download/v0.4.4/linux-${TARGET_ARCH}-casaos-local-storage-v0.4.4.tar.gz"
-"${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-AppManagement/releases/download/${CASAOS_APP_MANAGEMENT_VERSION}/linux-${TARGET_ARCH}-casaos-app-management-${CASAOS_APP_MANAGEMENT_VERSION}.tar.gz"
+"${CASAOS_FORK_RELEASE_BASE_URL}/linux-${TARGET_ARCH}-casaos-app-management-${CASAOS_APP_MANAGEMENT_VERSION}.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS/releases/download/v0.4.15/linux-${TARGET_ARCH}-casaos-v0.4.15.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-CLI/releases/download/v0.4.4-3-alpha1/linux-${TARGET_ARCH}-casaos-cli-v0.4.4-3-alpha1.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-UI/releases/download/v0.4.25/linux-all-casaos-v0.4.25.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-AppStore/releases/download/v0.4.5/linux-all-appstore-v0.4.5.tar.gz"
+"${CASAOS_FORK_RELEASE_BASE_URL}/${CASAOS_UBUNTU26_OVERLAY_FILE}"
     )
 }
 
@@ -562,6 +574,20 @@ Configuration_Addons() {
     fi
 }
 
+# Verify a fork-owned package before extracting it.
+Verify_Fork_Package() {
+    local package_file="$1"
+    local expected_sha256="$2"
+
+    command -v sha256sum >/dev/null 2>&1 || Show 1 "sha256sum is required to verify CasaOS fork packages"
+
+    if ! printf '%s  %s\n' "${expected_sha256}" "${package_file}" | ${sudo_cmd} sha256sum --check --status -; then
+        Show 1 "Checksum verification failed for ${package_file}"
+    fi
+
+    Show 0 "Verified ${package_file}"
+}
+
 # Download And Install CasaOS
 DownloadAndInstallCasaOS() {
     if [ -z "${BUILD_DIR}" ]; then
@@ -577,6 +603,13 @@ DownloadAndInstallCasaOS() {
             ${sudo_cmd} wget -t 3 -q --show-progress -c  "${PACKAGE}" || Show 1 "Failed to download package"
             ColorReset
         done
+
+        Verify_Fork_Package \
+            "linux-${TARGET_ARCH}-casaos-app-management-${CASAOS_APP_MANAGEMENT_VERSION}.tar.gz" \
+            "${CASAOS_APP_MANAGEMENT_SHA256}"
+        Verify_Fork_Package \
+            "${CASAOS_UBUNTU26_OVERLAY_FILE}" \
+            "${CASAOS_UBUNTU26_OVERLAY_SHA256}"
 
         for PACKAGE_FILE in linux-*.tar.gz; do
             Show 2 "Extracting ${PACKAGE_FILE}..."
@@ -705,7 +738,7 @@ Welcome_Banner() {
     echo -e " Open your browser and visit the above address."
     echo -e "${GREEN_LINE}"
     echo -e ""
-    echo -e " ${aCOLOUR[2]}CasaOS Project  : https://github.com/IceWhaleTech/CasaOS"
+    echo -e " ${aCOLOUR[2]}CasaOS Fork     : https://github.com/alvins82/CasaOS"
     echo -e " ${aCOLOUR[2]}CasaOS Team     : https://github.com/IceWhaleTech/CasaOS#maintainers"
     echo -e " ${aCOLOUR[2]}CasaOS Discord  : https://discord.gg/knqAbbBbeX"
     echo -e " ${aCOLOUR[2]}Website         : https://www.casaos.io"
