@@ -8,9 +8,9 @@ The recommended installation downloads the immutable release script and verifies
 
 ```bash
 curl -fL -o install.sh \
-  https://github.com/alvins82/get/releases/download/v0.4.17-ubuntu26.1/install.sh
+  https://github.com/alvins82/CasaOS-Install/releases/download/v0.4.17-ubuntu26.2/install.sh
 curl -fL -o install.sh.sha256 \
-  https://github.com/alvins82/get/releases/download/v0.4.17-ubuntu26.1/install.sh.sha256
+  https://github.com/alvins82/CasaOS-Install/releases/download/v0.4.17-ubuntu26.2/install.sh.sha256
 sha256sum --check install.sh.sha256
 sudo bash install.sh
 ```
@@ -18,7 +18,7 @@ sudo bash install.sh
 For a disposable test machine, the shorter form is:
 
 ```bash
-curl -fsSL https://github.com/alvins82/get/releases/download/v0.4.17-ubuntu26.1/install.sh | sudo bash
+curl -fsSL https://github.com/alvins82/CasaOS-Install/releases/download/v0.4.17-ubuntu26.2/install.sh | sudo bash
 ```
 
 Supported installer architectures are amd64, arm64, and arm/v7.

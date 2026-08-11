@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 #
-#       CasaOS Ubuntu 26 Installer v0.4.17-ubuntu26.1
-#   GitHub: https://github.com/alvins82/get
-#   Issues: https://github.com/alvins82/get/issues
+#       CasaOS Ubuntu 26 Installer v0.4.17-ubuntu26.2
+#   GitHub: https://github.com/alvins82/CasaOS-Install
+#   Issues: https://github.com/alvins82/CasaOS-Install/issues
 #   Requires: bash, mv, rm, tr, grep, sed, curl/wget, tar, smartmontools, parted, ntfs-3g, net-tools
 #
 #   This script installs CasaOS to your system.
@@ -78,8 +78,8 @@ readonly CASA_CONF_PATH=/etc/casaos/gateway.ini
 readonly CASA_UNINSTALL_URL="https://get.casaos.io/uninstall/v0.4.16"
 readonly CASA_UNINSTALL_PATH=/usr/bin/casaos-uninstall
 readonly CASAOS_APP_MANAGEMENT_VERSION="v0.4.17"
-readonly CASAOS_FORK_RELEASE_TAG="v0.4.17-ubuntu26.1"
-readonly CASAOS_FORK_RELEASE_BASE_URL="https://github.com/alvins82/get/releases/download/${CASAOS_FORK_RELEASE_TAG}"
+readonly CASAOS_FORK_RELEASE_TAG="v0.4.17-ubuntu26.2"
+readonly CASAOS_FORK_RELEASE_BASE_URL="https://github.com/alvins82/CasaOS-Install/releases/download/${CASAOS_FORK_RELEASE_TAG}"
 readonly CASAOS_UBUNTU26_OVERLAY_FILE="linux-zz-casaos-ubuntu26-overlay-${CASAOS_FORK_RELEASE_TAG}.tar.gz"
 readonly CASAOS_APP_MANAGEMENT_SHA256_AMD64="4d33403398842faaa00ac06feccf288a7f710e0163f549201f57703edf02ed11"
 readonly CASAOS_APP_MANAGEMENT_SHA256_ARM64="f147322581557ae3a471e6cbeb0ef517291da8f9b5d6baaf677b2f1ede4b36a1"
