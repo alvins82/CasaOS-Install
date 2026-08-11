@@ -4,6 +4,8 @@ This fork preserves the normal CasaOS installer behavior for supported Linux sys
 
 ## Install
 
+`install.sh` is the only supported installer entrypoint in this repository.
+
 The recommended installation follows the current stable release through an OS-neutral URL and verifies it before running as root:
 
 ```bash
