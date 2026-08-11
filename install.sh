@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 #
-#       CasaOS Installer v0.4.18
+#       CasaOS Installer v0.4.19
 #   GitHub: https://github.com/alvins82/CasaOS-Install
 #   Issues: https://github.com/alvins82/CasaOS-Install/issues
 #   Requires: bash, mv, rm, tr, grep, sed, curl/wget, tar, smartmontools, parted, ntfs-3g, net-tools
@@ -76,17 +76,19 @@ readonly CASA_CONF_PATH=/etc/casaos/gateway.ini
 readonly CASA_UNINSTALL_URL="https://get.casaos.io/uninstall/v0.4.16"
 readonly CASA_UNINSTALL_PATH=/usr/bin/casaos-uninstall
 readonly CASAOS_APP_MANAGEMENT_VERSION="v0.4.17"
-readonly CASAOS_INSTALL_RELEASE_TAG="v0.4.18"
+readonly CASAOS_INSTALL_RELEASE_TAG="v0.4.19"
 readonly CASAOS_RELEASE_BASE_URL="https://github.com/alvins82/CasaOS-Install/releases/download/${CASAOS_INSTALL_RELEASE_TAG}"
+readonly CASAOS_INSTALLER_SELF_URL="${CASAOS_RELEASE_BASE_URL}/install.sh"
+readonly CASAOS_UPDATE_LOG="/var/log/casaos/upgrade.log"
 readonly CASAOS_COMPAT_OVERLAY_FILE="linux-zz-casaos-compat-overlay-${CASAOS_INSTALL_RELEASE_TAG}.tar.gz"
 readonly CASAOS_CORE_PACKAGE_FILE_PREFIX="casaos-${CASAOS_INSTALL_RELEASE_TAG}"
 readonly CASAOS_APP_MANAGEMENT_SHA256_AMD64="4d33403398842faaa00ac06feccf288a7f710e0163f549201f57703edf02ed11"
 readonly CASAOS_APP_MANAGEMENT_SHA256_ARM64="f147322581557ae3a471e6cbeb0ef517291da8f9b5d6baaf677b2f1ede4b36a1"
 readonly CASAOS_APP_MANAGEMENT_SHA256_ARM7="459f17debc8090e5ce5f02dbfa5d7228e1dc6bdf3de23e02ff303657be3c03b1"
-readonly CASAOS_CORE_SHA256_AMD64="e9a7d5cb0579b6ba753965b4b4b9dcd7020ae9a971906b2232f61d4d8462c6bf"
-readonly CASAOS_CORE_SHA256_ARM64="3212955e9bbda87d92edc6dbf9577c0d1c5aa16cc43e3c2316b1acf983b1eed5"
-readonly CASAOS_CORE_SHA256_ARM7="1c1200de2e42096a8d26a37128d8d68c108dd5194f5bf38a8f9ea83cc90f6391"
-readonly CASAOS_COMPAT_OVERLAY_SHA256="65a2f11b4e99eac535a194cbe1ce811bcbdadb831e41d672498bab27026b5419"
+readonly CASAOS_CORE_SHA256_AMD64="331e41fe0b0a78448e40df3b0cc1d8a10cfcecf9c663804321f5511f2f1c5ec2"
+readonly CASAOS_CORE_SHA256_ARM64="2485021957429342cef51b523aa2b052ba950cf059f8e17860d0935a835b77d0"
+readonly CASAOS_CORE_SHA256_ARM7="49dc9802785e20290aecf7b53ba06e08841b886d21bbdadd7acc923f685ecc80"
+readonly CASAOS_COMPAT_OVERLAY_SHA256="dbce0d45bc7c7ae326c49503e007d19839a6f1bc71ccdc318d4875138bcd0fa1"
 
 # REQUIREMENTS CONF PATH
 # Udevil
@@ -114,11 +116,29 @@ CASAOS_CORE_SHA256=""
 TMP_ROOT=/tmp/casaos-installer
 REGION="UNKNOWN"
 CASA_DOWNLOAD_DOMAIN="https://github.com/"
+STOPPED_CASA_SERVICES=()
+INSTALL_COMPLETED=0
 
 trap 'onCtrlC' INT
+trap 'onExit $?' EXIT
 onCtrlC() {
     echo -e "${COLOUR_RESET}"
-    exit 1
+    exit 130
+}
+
+onExit() {
+    local exit_code="$1"
+    local service
+
+    if ((exit_code == 0 || INSTALL_COMPLETED == 1 || ${#STOPPED_CASA_SERVICES[@]} == 0)); then
+        return
+    fi
+
+    set +e
+    echo "CasaOS installation failed; restarting services that were stopped."
+    for service in "${STOPPED_CASA_SERVICES[@]}"; do
+        ${sudo_cmd} systemctl start "${service}" >/dev/null 2>&1 || true
+    done
 }
 
 ###############################################################################
@@ -151,6 +171,42 @@ Show() {
     elif (($1 == 3)); then
         echo -e "${aCOLOUR[2]}[$COLOUR_RESET${aCOLOUR[4]}NOTICE$COLOUR_RESET${aCOLOUR[2]}]$COLOUR_RESET $2"
     fi
+}
+
+Running_Under_CasaOS_Service() {
+    [[ -r /proc/$$/cgroup ]] && grep -Eq '(^|/)casaos\.service($|/)' /proc/$$/cgroup
+}
+
+Detach_From_CasaOS_Service() {
+    local detached_command
+    local release_unit
+    local update_unit
+
+    [[ "${CASAOS_INSTALLER_DETACHED:-0}" == "1" ]] && return
+    Running_Under_CasaOS_Service || return
+
+    command -v systemd-run >/dev/null 2>&1 || Show 1 "systemd-run is required for in-app updates"
+    ${sudo_cmd} install -d -m 0755 "$(dirname "${CASAOS_UPDATE_LOG}")" || Show 1 "Failed to prepare CasaOS update log directory"
+    ${sudo_cmd} touch "${CASAOS_UPDATE_LOG}" || Show 1 "Failed to prepare CasaOS update log"
+
+    release_unit=${CASAOS_INSTALL_RELEASE_TAG//./-}
+    update_unit="casaos-update-${release_unit}-$(date +%s)-$$"
+    printf -v detached_command 'exec >> %q 2>&1; curl -fsSL %q | /bin/bash' \
+        "${CASAOS_UPDATE_LOG}" \
+        "${CASAOS_INSTALLER_SELF_URL}"
+
+    Show 2 "Handing the update to ${update_unit}.service..."
+    if ! ${sudo_cmd} systemd-run \
+        --quiet \
+        --collect \
+        --unit="${update_unit}" \
+        --property=Type=exec \
+        --setenv=CASAOS_INSTALLER_DETACHED=1 \
+        /bin/bash -o pipefail -c "${detached_command}"; then
+        Show 1 "Failed to detach the in-app update from casaos.service"
+    fi
+
+    exit 0
 }
 
 Warn() {
@@ -637,6 +693,7 @@ DownloadAndInstallCasaOS() {
             Show 2 "Stopping ${SERVICE}..."
             GreyStart
             ${sudo_cmd} systemctl stop "${SERVICE}" || Show 3 "Service ${SERVICE} does not exist."
+            STOPPED_CASA_SERVICES+=("${SERVICE}")
             ColorReset
         fi
     done
@@ -787,6 +844,10 @@ while getopts ":p:h" arg; do
     esac
 done
 
+# Existing CasaOS releases start this installer inside casaos.service. Move the
+# real update into its own systemd unit before the installer stops CasaOS.
+Detach_From_CasaOS_Service
+
 # Step 0 : Get Download Url Domain
 Get_Download_Url_Domain
 # Step 1: Check ARCH
@@ -818,6 +879,7 @@ DownloadAndInstallCasaOS
 
 # Step 9: Check Service Status
 Check_Service_status
+INSTALL_COMPLETED=1
 
 # Step 10: Clear Term and Show Welcome Banner
 Welcome_Banner

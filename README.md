@@ -23,6 +23,7 @@ Release tags are platform-neutral. The installer detects the Linux distribution 
 - Docker/Compose SDK upgrades and API negotiation in [CasaOS-AppManagement](https://github.com/alvins82/CasaOS-AppManagement)
 - Ubuntu 26 setup resolution in [CasaOS](https://github.com/alvins82/CasaOS), [Gateway](https://github.com/alvins82/CasaOS-Gateway), [UserService](https://github.com/alvins82/CasaOS-UserService), [LocalStorage](https://github.com/alvins82/CasaOS-LocalStorage), and [MessageBus](https://github.com/alvins82/CasaOS-MessageBus)
 - Fork-aware dashboard update checks and installation through CasaOS-Install releases
+- Detached in-app updates that survive CasaOS service restarts and recover stopped services after installer failures
 - SHA-256 verification of every fork-owned package before extraction
 - A release `components.lock` file recording the exact source commit for every patched component
 
