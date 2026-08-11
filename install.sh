@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 #
-#       CasaOS Ubuntu 26 Installer v0.4.17-ubuntu26.3
+#       CasaOS Installer v0.4.18
 #   GitHub: https://github.com/alvins82/CasaOS-Install
 #   Issues: https://github.com/alvins82/CasaOS-Install/issues
 #   Requires: bash, mv, rm, tr, grep, sed, curl/wget, tar, smartmontools, parted, ntfs-3g, net-tools
@@ -8,9 +8,7 @@
 #   This script installs CasaOS to your system.
 #   Usage:
 #
-#   	$ wget -qO- https://get.casaos.io/ | bash
-#   	  or
-#   	$ curl -fsSL https://get.casaos.io/ | bash
+#   	$ curl -fsSL https://github.com/alvins82/CasaOS-Install/releases/latest/download/install.sh | sudo bash
 #
 #   In automated environments, you may want to run as root.
 #   If using curl, we recommend using the -fsSL flags.
@@ -78,17 +76,17 @@ readonly CASA_CONF_PATH=/etc/casaos/gateway.ini
 readonly CASA_UNINSTALL_URL="https://get.casaos.io/uninstall/v0.4.16"
 readonly CASA_UNINSTALL_PATH=/usr/bin/casaos-uninstall
 readonly CASAOS_APP_MANAGEMENT_VERSION="v0.4.17"
-readonly CASAOS_FORK_RELEASE_TAG="v0.4.17-ubuntu26.3"
-readonly CASAOS_FORK_RELEASE_BASE_URL="https://github.com/alvins82/CasaOS-Install/releases/download/${CASAOS_FORK_RELEASE_TAG}"
-readonly CASAOS_UBUNTU26_OVERLAY_FILE="linux-zz-casaos-ubuntu26-overlay-${CASAOS_FORK_RELEASE_TAG}.tar.gz"
-readonly CASAOS_CORE_PACKAGE_FILE_PREFIX="casaos-${CASAOS_FORK_RELEASE_TAG}"
+readonly CASAOS_INSTALL_RELEASE_TAG="v0.4.18"
+readonly CASAOS_RELEASE_BASE_URL="https://github.com/alvins82/CasaOS-Install/releases/download/${CASAOS_INSTALL_RELEASE_TAG}"
+readonly CASAOS_COMPAT_OVERLAY_FILE="linux-zz-casaos-compat-overlay-${CASAOS_INSTALL_RELEASE_TAG}.tar.gz"
+readonly CASAOS_CORE_PACKAGE_FILE_PREFIX="casaos-${CASAOS_INSTALL_RELEASE_TAG}"
 readonly CASAOS_APP_MANAGEMENT_SHA256_AMD64="4d33403398842faaa00ac06feccf288a7f710e0163f549201f57703edf02ed11"
 readonly CASAOS_APP_MANAGEMENT_SHA256_ARM64="f147322581557ae3a471e6cbeb0ef517291da8f9b5d6baaf677b2f1ede4b36a1"
 readonly CASAOS_APP_MANAGEMENT_SHA256_ARM7="459f17debc8090e5ce5f02dbfa5d7228e1dc6bdf3de23e02ff303657be3c03b1"
-readonly CASAOS_CORE_SHA256_AMD64="2264d3a3e33a11dc1c6bef9f664c610165a9f96d925883894bb2c8c2fc2b528a"
-readonly CASAOS_CORE_SHA256_ARM64="e00410c8587d52ad3a704294781c40e59dfef83c9e1c00291b3364e6532d796f"
-readonly CASAOS_CORE_SHA256_ARM7="fe5da0323b92e37b636d81cb1526c877a715e6f0c85b141348730e1ff02ec52c"
-readonly CASAOS_UBUNTU26_OVERLAY_SHA256="91145540b252298a3ec948959773004211e70d40822f31fa553b0d7a53455730"
+readonly CASAOS_CORE_SHA256_AMD64="e9a7d5cb0579b6ba753965b4b4b9dcd7020ae9a971906b2232f61d4d8462c6bf"
+readonly CASAOS_CORE_SHA256_ARM64="3212955e9bbda87d92edc6dbf9577c0d1c5aa16cc43e3c2316b1acf983b1eed5"
+readonly CASAOS_CORE_SHA256_ARM7="1c1200de2e42096a8d26a37128d8d68c108dd5194f5bf38a8f9ea83cc90f6391"
+readonly CASAOS_COMPAT_OVERLAY_SHA256="65a2f11b4e99eac535a194cbe1ce811bcbdadb831e41d672498bab27026b5419"
 
 # REQUIREMENTS CONF PATH
 # Udevil
@@ -239,12 +237,12 @@ Check_Arch() {
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-MessageBus/releases/download/v0.4.4-3-alpha2/linux-${TARGET_ARCH}-casaos-message-bus-v0.4.4-3-alpha2.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-UserService/releases/download/v0.4.8/linux-${TARGET_ARCH}-casaos-user-service-v0.4.8.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-LocalStorage/releases/download/v0.4.4/linux-${TARGET_ARCH}-casaos-local-storage-v0.4.4.tar.gz"
-"${CASAOS_FORK_RELEASE_BASE_URL}/linux-${TARGET_ARCH}-casaos-app-management-${CASAOS_APP_MANAGEMENT_VERSION}.tar.gz"
-"${CASAOS_FORK_RELEASE_BASE_URL}/linux-${TARGET_ARCH}-${CASAOS_CORE_PACKAGE_FILE_PREFIX}.tar.gz"
+"${CASAOS_RELEASE_BASE_URL}/linux-${TARGET_ARCH}-casaos-app-management-${CASAOS_APP_MANAGEMENT_VERSION}.tar.gz"
+"${CASAOS_RELEASE_BASE_URL}/linux-${TARGET_ARCH}-${CASAOS_CORE_PACKAGE_FILE_PREFIX}.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-CLI/releases/download/v0.4.4-3-alpha1/linux-${TARGET_ARCH}-casaos-cli-v0.4.4-3-alpha1.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-UI/releases/download/v0.4.25/linux-all-casaos-v0.4.25.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-AppStore/releases/download/v0.4.5/linux-all-appstore-v0.4.5.tar.gz"
-"${CASAOS_FORK_RELEASE_BASE_URL}/${CASAOS_UBUNTU26_OVERLAY_FILE}"
+"${CASAOS_RELEASE_BASE_URL}/${CASAOS_COMPAT_OVERLAY_FILE}"
     )
 }
 
@@ -619,8 +617,8 @@ DownloadAndInstallCasaOS() {
             "linux-${TARGET_ARCH}-${CASAOS_CORE_PACKAGE_FILE_PREFIX}.tar.gz" \
             "${CASAOS_CORE_SHA256}"
         Verify_Fork_Package \
-            "${CASAOS_UBUNTU26_OVERLAY_FILE}" \
-            "${CASAOS_UBUNTU26_OVERLAY_SHA256}"
+            "${CASAOS_COMPAT_OVERLAY_FILE}" \
+            "${CASAOS_COMPAT_OVERLAY_SHA256}"
 
         for PACKAGE_FILE in linux-*.tar.gz; do
             Show 2 "Extracting ${PACKAGE_FILE}..."

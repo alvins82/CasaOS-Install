@@ -6,9 +6,9 @@ readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly INSTALLER_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 readonly WORKSPACE_ROOT="$(cd "${INSTALLER_ROOT}/.." && pwd)"
 readonly CASAOS_ROOT="${CASAOS_ROOT:-${WORKSPACE_ROOT}/CasaOS}"
-readonly COMPONENT_LOCK="${INSTALLER_ROOT}/release/ubuntu26-components.env"
+readonly COMPONENT_LOCK="${INSTALLER_ROOT}/release/components.env"
 
-# shellcheck source=../release/ubuntu26-components.env
+# shellcheck source=../release/components.env
 source "${COMPONENT_LOCK}"
 
 readonly OUTPUT_DIR="${1:-${CASAOS_ROOT}/dist/fork}"

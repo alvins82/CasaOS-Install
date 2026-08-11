@@ -16,6 +16,8 @@ This installs the full fork release, including all Docker compatibility fixes.
 
 Supported installer architectures are amd64, arm64, and arm/v7.
 
+Release tags are platform-neutral. The installer detects the Linux distribution and architecture at runtime, then applies only the compatibility handling required by that system.
+
 ## What is included
 
 - Docker/Compose SDK upgrades and API negotiation in [CasaOS-AppManagement](https://github.com/alvins82/CasaOS-AppManagement)

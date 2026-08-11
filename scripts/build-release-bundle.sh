@@ -7,15 +7,15 @@ readonly INSTALLER_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 readonly WORKSPACE_ROOT="$(cd "${INSTALLER_ROOT}/.." && pwd)"
 readonly APP_MANAGEMENT_ROOT="${APP_MANAGEMENT_ROOT:-${WORKSPACE_ROOT}/CasaOS-AppManagement}"
 readonly CASAOS_ROOT="${CASAOS_ROOT:-${WORKSPACE_ROOT}/CasaOS}"
-readonly COMPONENT_LOCK="${INSTALLER_ROOT}/release/ubuntu26-components.env"
+readonly COMPONENT_LOCK="${INSTALLER_ROOT}/release/components.env"
 
-# shellcheck source=../release/ubuntu26-components.env
+# shellcheck source=../release/components.env
 source "${COMPONENT_LOCK}"
 
-readonly BUNDLE_TAG="${CASAOS_BUNDLE_TAG}"
+readonly RELEASE_TAG="${CASAOS_RELEASE_TAG}"
 readonly APP_MANAGEMENT_VERSION="${CASAOS_APP_MANAGEMENT_VERSION}"
 readonly OUTPUT_DIR="${1:-${INSTALLER_ROOT}/dist}"
-readonly OVERLAY_FILE="linux-zz-casaos-ubuntu26-overlay-${BUNDLE_TAG}.tar.gz"
+readonly OVERLAY_FILE="linux-zz-casaos-compat-overlay-${RELEASE_TAG}.tar.gz"
 
 readonly APP_MANAGEMENT_COMMIT="$(git -C "${APP_MANAGEMENT_ROOT}" rev-parse HEAD)"
 readonly BUILD_METADATA="${APP_MANAGEMENT_ROOT}/dist/metadata.json"
@@ -57,7 +57,7 @@ if [[ ! -f "${CASAOS_BUILD_METADATA}" ]] || ! grep -q "\"commit\":\"${CASAOS_COM
     exit 1
 fi
 
-readonly STAGING_ROOT="$(mktemp -d "${TMPDIR:-/tmp}/casaos-ubuntu26-bundle.XXXXXX")"
+readonly STAGING_ROOT="$(mktemp -d "${TMPDIR:-/tmp}/casaos-release-bundle.XXXXXX")"
 trap 'rm -rf "${STAGING_ROOT}"' EXIT
 
 mkdir -p "${OUTPUT_DIR}"
@@ -94,7 +94,7 @@ package_app_management() {
 package_casaos() {
     local target_arch="$1"
     local stage_dir="${STAGING_ROOT}/casaos-${target_arch}"
-    local output_file="${OUTPUT_DIR}/linux-${target_arch}-casaos-${BUNDLE_TAG}.tar.gz"
+    local output_file="${OUTPUT_DIR}/linux-${target_arch}-casaos-${RELEASE_TAG}.tar.gz"
 
     mkdir -p "${stage_dir}"
     cp -a "${CASAOS_ROOT}/build" "${stage_dir}/build"
@@ -120,10 +120,10 @@ package_overlay() {
     install -m 0755 "${APP_MANAGEMENT_ROOT}/build/scripts/setup/script.d/06-setup-app-management.sh" "${setup_dir}/"
 
     mkdir -p "${stage_dir}/build/sysroot/var/lib/casaos"
-    printf '%s\n' "${BUNDLE_TAG}" >"${stage_dir}/build/sysroot/var/lib/casaos/fork-release"
+    printf '%s\n' "${RELEASE_TAG}" >"${stage_dir}/build/sysroot/var/lib/casaos/fork-release"
 
     create_archive "${stage_dir}" "${OUTPUT_DIR}/${OVERLAY_FILE}"
-    echo "Packaged Ubuntu 26 setup overlay as ${OVERLAY_FILE}"
+    echo "Packaged compatibility overlay as ${OVERLAY_FILE}"
 }
 
 write_checksums() {
@@ -133,9 +133,9 @@ write_checksums() {
         "linux-amd64-casaos-app-management-${APP_MANAGEMENT_VERSION}.tar.gz"
         "linux-arm64-casaos-app-management-${APP_MANAGEMENT_VERSION}.tar.gz"
         "linux-arm-7-casaos-app-management-${APP_MANAGEMENT_VERSION}.tar.gz"
-        "linux-amd64-casaos-${BUNDLE_TAG}.tar.gz"
-        "linux-arm64-casaos-${BUNDLE_TAG}.tar.gz"
-        "linux-arm-7-casaos-${BUNDLE_TAG}.tar.gz"
+        "linux-amd64-casaos-${RELEASE_TAG}.tar.gz"
+        "linux-arm64-casaos-${RELEASE_TAG}.tar.gz"
+        "linux-arm-7-casaos-${RELEASE_TAG}.tar.gz"
         "${OVERLAY_FILE}"
         "install.sh"
         "components.lock"
@@ -164,8 +164,8 @@ write_checksums() {
 
 write_version_manifest() {
     printf '{\n  "version": "%s",\n  "change_log": "%s"\n}\n' \
-        "${BUNDLE_TAG}" \
-        "https://github.com/alvins82/CasaOS-Install/releases/tag/${BUNDLE_TAG}" \
+        "${RELEASE_TAG}" \
+        "https://github.com/alvins82/CasaOS-Install/releases/tag/${RELEASE_TAG}" \
         >"${OUTPUT_DIR}/version.json"
 }
 
