@@ -6,7 +6,13 @@ This fork preserves the normal CasaOS installer behavior for supported Linux sys
 
 `install.sh` is the only supported installer entrypoint in this repository.
 
-The recommended installation follows the current stable release through an OS-neutral URL and verifies it before running as root:
+Install the latest stable release through an OS-neutral URL with one command:
+
+```bash
+curl -fsSL https://github.com/alvins82/CasaOS-Install/releases/latest/download/install.sh | sudo bash
+```
+
+This installs the full fork release, including all Docker compatibility fixes. For detached checksum verification, download and verify the installer before running it as root:
 
 ```bash
 curl -fL -o install.sh \
@@ -15,12 +21,6 @@ curl -fL -o install.sh.sha256 \
   https://github.com/alvins82/CasaOS-Install/releases/latest/download/install.sh.sha256
 sha256sum --check install.sh.sha256
 sudo bash install.sh
-```
-
-For a disposable test machine, the shorter form is:
-
-```bash
-curl -fsSL https://github.com/alvins82/CasaOS-Install/releases/latest/download/install.sh | sudo bash
 ```
 
 Supported installer architectures are amd64, arm64, and arm/v7.
