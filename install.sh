@@ -298,7 +298,7 @@ Check_Arch() {
 "${CASAOS_RELEASE_BASE_URL}/linux-${TARGET_ARCH}-casaos-app-management-${CASAOS_APP_MANAGEMENT_VERSION}.tar.gz"
 "${CASAOS_RELEASE_BASE_URL}/linux-${TARGET_ARCH}-${CASAOS_CORE_PACKAGE_FILE_PREFIX}.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-CLI/releases/download/v0.4.4-3-alpha1/linux-${TARGET_ARCH}-casaos-cli-v0.4.4-3-alpha1.tar.gz"
-"${CASA_DOWNLOAD_DOMAIN}alvins82/CasaOS-UI/releases/download/v0.4.20/linux-all-casaos-v0.4.20.tar.gz"
+"${CASA_DOWNLOAD_DOMAIN}alvins82/CasaOS-UI/releases/download/v0.4.21/linux-all-casaos-v0.4.21.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-AppStore/releases/download/v0.4.5/linux-all-appstore-v0.4.5.tar.gz"
 "${CASAOS_RELEASE_BASE_URL}/${CASAOS_COMPAT_OVERLAY_FILE}"
     )
