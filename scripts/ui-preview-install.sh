@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-readonly RELEASE_TAG="v0.4.23"
+readonly RELEASE_TAG="v0.4.24"
 readonly UI_ARCHIVE_URL="https://github.com/alvins82/CasaOS-UI/releases/download/${RELEASE_TAG}/linux-all-casaos-${RELEASE_TAG}.tar.gz"
 readonly TMP_ROOT="$(mktemp -d "${TMPDIR:-/tmp}/casaos-ui-update.XXXXXX")"
 readonly LOG_PATH="/var/log/casaos/upgrade.log"
