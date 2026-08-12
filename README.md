@@ -14,6 +14,8 @@ curl -fsSL https://github.com/alvins82/CasaOS-Install/releases/latest/download/i
 
 This installs the full fork release, including all Docker compatibility fixes.
 
+The current full bundle is `v0.4.25`. See [CHANGELOG.md](CHANGELOG.md) for release notes.
+
 Supported installer architectures are amd64, arm64, and arm/v7.
 
 Release tags are platform-neutral. The installer detects the Linux distribution and architecture at runtime, then applies only the compatibility handling required by that system.
@@ -22,6 +24,7 @@ Release tags are platform-neutral. The installer detects the Linux distribution 
 
 - Docker/Compose SDK upgrades and API negotiation in [CasaOS-AppManagement](https://github.com/alvins82/CasaOS-AppManagement)
 - Ubuntu 26 setup resolution in [CasaOS](https://github.com/alvins82/CasaOS), [Gateway](https://github.com/alvins82/CasaOS-Gateway), [UserService](https://github.com/alvins82/CasaOS-UserService), [LocalStorage](https://github.com/alvins82/CasaOS-LocalStorage), and [MessageBus](https://github.com/alvins82/CasaOS-MessageBus)
+- External-only merged storage: system storage is excluded from mergerfs while system AppData remains available at `/DATA/AppData`
 - Fork-aware dashboard update checks and installation through CasaOS-Install releases
 - Detached in-app updates that survive CasaOS service restarts and recover stopped services after installer failures
 - SHA-256 verification of every fork-owned package before extraction
