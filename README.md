@@ -14,11 +14,15 @@ curl -fsSL https://github.com/alvins82/CasaOS-Install/releases/latest/download/i
 
 This installs the full fork release, including all Docker compatibility fixes.
 
-The current full bundle is `v0.4.25`. See [CHANGELOG.md](CHANGELOG.md) for release notes.
+The current full bundle is `v0.4.26`. See [CHANGELOG.md](CHANGELOG.md) for release notes.
 
 Supported installer architectures are amd64, arm64, and arm/v7.
 
 Release tags are platform-neutral. The installer detects the Linux distribution and architecture at runtime, then applies only the compatibility handling required by that system.
+
+## Fork Changelog
+
+- **2026-08-13 — [v0.4.26](https://github.com/alvins82/CasaOS-Install/releases/tag/v0.4.26):** Added in-dashboard system package updates, accurate nested filesystem usage and disk ownership, and the persistent widget search setting. This bundle pins CasaOS core `v0.4.25`, CasaOS UI `v0.4.28`, and CasaOS LocalStorage `v0.4.22`. PRs: [CasaOS #16](https://github.com/alvins82/CasaOS/pull/16), [CasaOS #17](https://github.com/alvins82/CasaOS/pull/17), [CasaOS #18](https://github.com/alvins82/CasaOS/pull/18), [CasaOS #19](https://github.com/alvins82/CasaOS/pull/19), [CasaOS #20](https://github.com/alvins82/CasaOS/pull/20), [CasaOS-UI #8](https://github.com/alvins82/CasaOS-UI/pull/8), [CasaOS-UI #9](https://github.com/alvins82/CasaOS-UI/pull/9), [CasaOS-UI #10](https://github.com/alvins82/CasaOS-UI/pull/10), [CasaOS-LocalStorage #5](https://github.com/alvins82/CasaOS-LocalStorage/pull/5).
 
 ## What is included
 
