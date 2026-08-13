@@ -2,6 +2,21 @@
 
 All notable changes to the CasaOS fork installer are documented here.
 
+## [0.4.30] - 2026-08-13
+
+### Added
+
+- Publish the next platform-neutral amd64, arm64, and arm/v7 bundle with the merged-storage default-directory fix.
+
+### Changed
+
+- Pin CasaOS core `v0.4.26`, CasaOS UI `v0.4.29`, and CasaOS LocalStorage `v0.4.24` in the component lock.
+- Keep the unchanged Gateway, UserService, MessageBus, AppManagement, CLI, and AppStore component commits from `v0.4.29`.
+
+### Fixed
+
+- Create missing `Documents`, `Downloads`, `Gallery`, and `Media` directories when external merged storage is created, while preserving system `AppData` behavior ([CasaOS-LocalStorage #7](https://github.com/alvins82/CasaOS-LocalStorage/pull/7)).
+
 ## [0.4.29] - 2026-08-13
 
 ### Added
