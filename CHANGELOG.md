@@ -2,6 +2,22 @@
 
 All notable changes to the CasaOS fork installer are documented here.
 
+## [0.4.33] - 2026-08-15
+
+### Changed
+
+- Pin CasaOS core `v0.4.28` and CasaOS UI `v0.4.30` in the component lock.
+- Record the exact merged CasaOS and CasaOS UI commits used by this full bundle.
+
+### Fixed
+
+- Include the systemd power-action fix and the matching UI shutdown/restart behavior ([CasaOS #26](https://github.com/alvins82/CasaOS/pull/26); [CasaOS-UI #15](https://github.com/alvins82/CasaOS-UI/pull/15)).
+
+### Verification
+
+- Rebuilt the platform-neutral amd64, arm64, and arm/v7 installer bundle.
+- Preserved SHA-256 verification for all fork-owned installer assets.
+
 ## [0.4.32] - 2026-08-14
 
 ### Fixed
