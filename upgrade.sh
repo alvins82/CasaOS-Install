@@ -351,6 +351,62 @@ Check_Dependency_Installation() {
     done
 }
 
+Install_Optional_SMB_Discovery_Package() {
+    local package_name="$1"
+    local command_name="$2"
+    local install_status=0
+
+    if [[ -x "$(command -v "${command_name}" 2>/dev/null)" ]]; then
+        return 0
+    fi
+
+    Show 2 "Install optional SMB discovery dependency: ${package_name}"
+    GreyStart
+    if command -v apk >/dev/null 2>&1; then
+        ${sudo_cmd} apk add --no-cache "${package_name}" || install_status=$?
+    elif command -v apt-get >/dev/null 2>&1; then
+        ${sudo_cmd} apt-get -y -qq install "${package_name}" --no-upgrade || install_status=$?
+    elif command -v dnf >/dev/null 2>&1; then
+        ${sudo_cmd} dnf install -y "${package_name}" || install_status=$?
+    elif command -v zypper >/dev/null 2>&1; then
+        ${sudo_cmd} zypper --non-interactive install "${package_name}" || install_status=$?
+    elif command -v yum >/dev/null 2>&1; then
+        ${sudo_cmd} yum install -y "${package_name}" || install_status=$?
+    elif command -v pacman >/dev/null 2>&1; then
+        ${sudo_cmd} pacman --noconfirm --needed -S "${package_name}" || install_status=$?
+    elif command -v paru >/dev/null 2>&1; then
+        ${sudo_cmd} paru --noconfirm --needed -S "${package_name}" || install_status=$?
+    else
+        install_status=1
+    fi
+    ColorReset
+
+    if ((install_status != 0)) || [[ ! -x "$(command -v "${command_name}" 2>/dev/null)" ]]; then
+        Show 3 "Optional SMB discovery dependency ${package_name} is unavailable; continuing without ${command_name}."
+    else
+        Show 0 "Optional SMB discovery dependency ${package_name} installed."
+    fi
+}
+
+Install_SMB_Discovery_Depends() {
+    local avahi_package
+    local wsdd_package="wsdd"
+
+    if command -v apt-get >/dev/null 2>&1; then
+        avahi_package="avahi-daemon"
+    elif command -v apk >/dev/null 2>&1 || command -v dnf >/dev/null 2>&1 || \
+        command -v zypper >/dev/null 2>&1 || command -v yum >/dev/null 2>&1 || \
+        command -v pacman >/dev/null 2>&1 || command -v paru >/dev/null 2>&1; then
+        avahi_package="avahi"
+    else
+        Show 3 "No supported package manager found for optional SMB discovery dependencies."
+        return 0
+    fi
+
+    Install_Optional_SMB_Discovery_Package "${avahi_package}" "avahi-daemon"
+    Install_Optional_SMB_Discovery_Package "${wsdd_package}" "wsdd"
+}
+
 
 #Configuration Addons
 Configuration_Addons() {
@@ -528,6 +584,7 @@ Check_Memory
 # Update_Package_Resource
 Install_Depends
 Check_Dependency_Installation
+Install_SMB_Discovery_Depends
 
 # Step 7: Configuration Addon
 Configuration_Addons
