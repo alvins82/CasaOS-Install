@@ -2,6 +2,21 @@
 
 All notable changes to the CasaOS fork installer are documented here.
 
+## [0.4.32] - 2026-08-14
+
+### Fixed
+
+- Pin CasaOS LocalStorage `v0.4.25`, which restores persisted mergerfs mounts before creating default `/DATA` directories so upgrades and service restarts retain the configured merged storage ([CasaOS-LocalStorage #9](https://github.com/alvins82/CasaOS-LocalStorage/pull/9)).
+
+### Changed
+
+- Keep the CasaOS core, UI, and other component commits from `v0.4.31` while updating the LocalStorage component lock to merge commit `837e73d9383ffaa585bcf11ef1367d7b8440cfcc`.
+
+### Verification
+
+- Rebuilt the platform-neutral amd64, arm64, and arm/v7 installer bundle.
+- Preserved SHA-256 verification for all fork-owned installer assets.
+
 ## [0.4.31] - 2026-08-14
 
 ### Added
