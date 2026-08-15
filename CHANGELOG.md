@@ -2,6 +2,21 @@
 
 All notable changes to the CasaOS fork installer are documented here.
 
+## [0.4.35] - 2026-08-15
+
+### Fixed
+
+- Correct the two truncated AppManagement SHA-256 constants in v0.4.34 and verify exact 64-character digests for amd64, arm64, and arm/v7.
+- Publish the compatibility overlay with the matching `v0.4.35` release marker.
+
+### Changed
+
+- Keep the component pins from v0.4.34: CasaOS core `v0.4.28`, CasaOS UI `v0.4.30`, and LocalStorage `v0.4.25`.
+
+### Verification
+
+- Verify all package digests against the release bundle checksum manifest and independently validate the installer’s embedded architecture-specific values.
+
 ## [0.4.34] - 2026-08-15
 
 ### Fixed

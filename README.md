@@ -14,7 +14,7 @@ curl -fsSL https://github.com/alvins82/CasaOS-Install/releases/latest/download/i
 
 This installs the full fork release, including all Docker compatibility fixes.
 
-The current full bundle is `v0.4.34`. See [CHANGELOG.md](CHANGELOG.md) for release notes.
+The current full bundle is `v0.4.35`. See [CHANGELOG.md](CHANGELOG.md) for release notes.
 
 Supported installer architectures are amd64, arm64, and arm/v7.
 
@@ -22,6 +22,7 @@ Release tags are platform-neutral. The installer detects the Linux distribution 
 
 ## Fork Changelog
 
+- **2026-08-15 — [v0.4.35](https://github.com/alvins82/CasaOS-Install/releases/tag/v0.4.35):** Supersedes v0.4.34 with exact 64-character SHA-256 values for every architecture, including the amd64 and arm/v7 AppManagement packages.
 - **2026-08-15 — [v0.4.34](https://github.com/alvins82/CasaOS-Install/releases/tag/v0.4.34):** Corrected the SHA-256 values used to verify the fork packages and republished the compatibility overlay with the matching release marker. This fixes upgrades that stopped during package verification after v0.4.33.
 - **2026-08-15 — [v0.4.33](https://github.com/alvins82/CasaOS-Install/releases/tag/v0.4.33):** Published the full fork bundle with CasaOS core `v0.4.28` and CasaOS UI `v0.4.30`. It fixes shutdown and restart handling by using explicit systemd power actions, keeping the UI from reloading after shutdown, and surfacing power-command failures. PRs: [CasaOS #26](https://github.com/alvins82/CasaOS/pull/26), [CasaOS-UI #15](https://github.com/alvins82/CasaOS-UI/pull/15).
 - **2026-08-14 — [v0.4.32](https://github.com/alvins82/CasaOS-Install/releases/tag/v0.4.32):** Published the full fork bundle with CasaOS LocalStorage `v0.4.25`, which restores persisted mergerfs mounts before creating default `/DATA` directories so updates and restarts retain the configured merged storage. PR: [CasaOS-LocalStorage #9](https://github.com/alvins82/CasaOS-LocalStorage/pull/9).
