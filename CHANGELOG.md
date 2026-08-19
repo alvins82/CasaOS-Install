@@ -2,6 +2,19 @@
 
 All notable changes to the CasaOS fork installer are documented here.
 
+## [0.4.36] - 2026-08-20
+
+### Changed
+
+- Bump CasaOS LocalStorage to `v0.4.26` (commit `3dd54c6`), which keeps restoring merge mounts every 30 seconds until their source disks appear, reports the offending entries when a merge mount point is not empty, and surfaces the last restore failure through the `merge/init` status endpoint.
+- Republish the CasaOS core and AppManagement packages from the verified v0.4.35 bundle and the compatibility overlay with the matching `v0.4.36` release marker.
+
+### Verification
+
+- The republished core and AppManagement tarballs are byte-identical to the v0.4.35 release assets (digests verified against v0.4.35 checksums and the installer’s embedded constants).
+- The v0.4.36 overlay differs from the v0.4.35 overlay only in the `fork-release` marker.
+- The LocalStorage `v0.4.26` assets were published by the `alvins82/CasaOS-LocalStorage` release workflow from tag `v0.4.26`.
+
 ## [0.4.35] - 2026-08-15
 
 ### Fixed
