@@ -2,6 +2,22 @@
 
 All notable changes to the CasaOS fork installer are documented here.
 
+## [0.4.39] - 2026-08-20
+
+### Changed
+
+- No functional code changes since v0.4.38. Re-pin the component releases to the commits now merged into their fork `main` branches:
+  - CasaOS LocalStorage `v0.4.27` → `v0.4.28` (commit `fc5bbd3`). This is a republish from `main` after the boot fixes were merged ([CasaOS-LocalStorage #10](https://github.com/alvins82/CasaOS-LocalStorage/pull/10)); the binary sources are byte-identical to v0.4.27, and the repository CHANGELOG now carries backfilled v0.4.26/v0.4.27 entries plus the v0.4.28 republish note.
+  - CasaOS AppManagement `v0.4.19` commit pinned from PR-branch tip `bd428f9` to the merge commit `40f2a6f` (identical tree); this is also the commit of the first tagged release of the fork, [CasaOS-AppManagement v0.4.19](https://github.com/alvins82/CasaOS-AppManagement/releases/tag/v0.4.19).
+- Republish the CasaOS core packages and the compatibility overlay with the matching `v0.4.39` release marker.
+
+### Verification
+
+- The republished core tarballs are byte-identical to the v0.4.38 release assets (digests verified against the installer's embedded constants, unchanged in v0.4.39).
+- The AppManagement v0.4.19 tarballs are reused verbatim from v0.4.38 (digests unchanged); `git diff bd428f9 40f2a6f` on the AppManagement fork is empty.
+- The v0.4.39 overlay differs from the v0.4.38 overlay only in the `fork-release` marker.
+- The LocalStorage `v0.4.28` assets are published by the `alvins82/CasaOS-LocalStorage` release workflow from tag `v0.4.28`; `git diff v0.4.27 v0.4.28` on that fork shows only the CHANGELOG.md change.
+
 ## [0.4.38] - 2026-08-20
 
 ### Fixed

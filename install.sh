@@ -76,7 +76,7 @@ readonly CASA_CONF_PATH=/etc/casaos/gateway.ini
 readonly CASA_UNINSTALL_URL="https://get.casaos.io/uninstall/v0.4.16"
 readonly CASA_UNINSTALL_PATH=/usr/bin/casaos-uninstall
 readonly CASAOS_APP_MANAGEMENT_VERSION="v0.4.19"
-readonly CASAOS_INSTALL_RELEASE_TAG="v0.4.38"
+readonly CASAOS_INSTALL_RELEASE_TAG="v0.4.39"
 readonly CASAOS_RELEASE_BASE_URL="https://github.com/alvins82/CasaOS-Install/releases/download/${CASAOS_INSTALL_RELEASE_TAG}"
 readonly CASAOS_INSTALLER_SELF_URL="${CASAOS_RELEASE_BASE_URL}/install.sh"
 readonly CASAOS_UPDATE_LOG="/var/log/casaos/upgrade.log"
@@ -294,7 +294,7 @@ Check_Arch() {
         "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-Gateway/releases/download/v0.4.9-alpha4/linux-${TARGET_ARCH}-casaos-gateway-v0.4.9-alpha4.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-MessageBus/releases/download/v0.4.4-3-alpha2/linux-${TARGET_ARCH}-casaos-message-bus-v0.4.4-3-alpha2.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-UserService/releases/download/v0.4.8/linux-${TARGET_ARCH}-casaos-user-service-v0.4.8.tar.gz"
-"${CASA_DOWNLOAD_DOMAIN}alvins82/CasaOS-LocalStorage/releases/download/v0.4.27/linux-${TARGET_ARCH}-casaos-local-storage-v0.4.27.tar.gz"
+"${CASA_DOWNLOAD_DOMAIN}alvins82/CasaOS-LocalStorage/releases/download/v0.4.28/linux-${TARGET_ARCH}-casaos-local-storage-v0.4.28.tar.gz"
 "${CASAOS_RELEASE_BASE_URL}/linux-${TARGET_ARCH}-casaos-app-management-${CASAOS_APP_MANAGEMENT_VERSION}.tar.gz"
 "${CASAOS_RELEASE_BASE_URL}/linux-${TARGET_ARCH}-${CASAOS_CORE_PACKAGE_FILE_PREFIX}.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-CLI/releases/download/v0.4.4-3-alpha1/linux-${TARGET_ARCH}-casaos-cli-v0.4.4-3-alpha1.tar.gz"
