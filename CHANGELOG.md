@@ -2,6 +2,20 @@
 
 All notable changes to the CasaOS fork installer are documented here.
 
+## [0.4.38] - 2026-08-20
+
+### Fixed
+
+- Fix a crash loop found during the first reboot test of v0.4.37: the AppManagement storage recovery sweep called `SetStatus` with a bare cron context that carried no event properties, so `PropertiesFromContext` returned a nil map and `SetStatus` panicked with “assignment to entry in nil map”, restarting the service every ~5 seconds (NRestarts reached 42 before the service gave up).
+- Bump CasaOS AppManagement to `v0.4.19` (commit `bd428f9`), which wraps the recovery sweep context with `common.WithProperties` before calling `SetStatus` and adds a defensive nil-map guard in `SetStatus` itself.
+- Republish the CasaOS core packages and the compatibility overlay with the matching `v0.4.38` release marker.
+
+### Verification
+
+- The republished core tarballs are byte-identical to the v0.4.37 release assets (digests verified against the installer’s embedded constants).
+- The AppManagement `v0.4.19` packages are cross-compiled for amd64, arm64, and arm/v7 with the same static build settings; a file-by-file diff against the v0.4.18 packages shows only the two `sysroot/usr/bin` binaries differ.
+- The v0.4.38 overlay differs from the v0.4.37 overlay only in the `fork-release` marker.
+
 ## [0.4.37] - 2026-08-20
 
 ### Changed
