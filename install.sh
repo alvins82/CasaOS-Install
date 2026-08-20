@@ -75,20 +75,20 @@ readonly UNAME_U
 readonly CASA_CONF_PATH=/etc/casaos/gateway.ini
 readonly CASA_UNINSTALL_URL="https://get.casaos.io/uninstall/v0.4.16"
 readonly CASA_UNINSTALL_PATH=/usr/bin/casaos-uninstall
-readonly CASAOS_APP_MANAGEMENT_VERSION="v0.4.17"
-readonly CASAOS_INSTALL_RELEASE_TAG="v0.4.36"
+readonly CASAOS_APP_MANAGEMENT_VERSION="v0.4.18"
+readonly CASAOS_INSTALL_RELEASE_TAG="v0.4.37"
 readonly CASAOS_RELEASE_BASE_URL="https://github.com/alvins82/CasaOS-Install/releases/download/${CASAOS_INSTALL_RELEASE_TAG}"
 readonly CASAOS_INSTALLER_SELF_URL="${CASAOS_RELEASE_BASE_URL}/install.sh"
 readonly CASAOS_UPDATE_LOG="/var/log/casaos/upgrade.log"
 readonly CASAOS_COMPAT_OVERLAY_FILE="linux-zz-casaos-compat-overlay-${CASAOS_INSTALL_RELEASE_TAG}.tar.gz"
 readonly CASAOS_CORE_PACKAGE_FILE_PREFIX="casaos-${CASAOS_INSTALL_RELEASE_TAG}"
-readonly CASAOS_APP_MANAGEMENT_SHA256_AMD64="7c0c19f0652db62bb643691ca5bafefe5f06ed360239f2de14ce32858464d14a"
-readonly CASAOS_APP_MANAGEMENT_SHA256_ARM64="5fb68d271f59908c054d5b79dd9fa8fbddd96bf2d49575bb183f72faf2668d4c"
-readonly CASAOS_APP_MANAGEMENT_SHA256_ARM7="df95c5b4687b94b77d20230a543f5504c58dd720adbd3904a4e1b8af2f05a72f"
+readonly CASAOS_APP_MANAGEMENT_SHA256_AMD64="370982f9c4e4af4b691abf62d3f2c56105d918df315069a893aba23c993dab7c"
+readonly CASAOS_APP_MANAGEMENT_SHA256_ARM64="7c294b4ad28befb21f07c46609282622aa61083c702c7f8ea226c1f0117a33cb"
+readonly CASAOS_APP_MANAGEMENT_SHA256_ARM7="5390d1d4f6c9ee7d4fe2bf0efb470f27abf5a6b060cce2149bdc6d8a7f08d632"
 readonly CASAOS_CORE_SHA256_AMD64="fda791737d73bee5aabf15f0fc1d5ffb5dab864f4450377d0c900422aaa305aa"
 readonly CASAOS_CORE_SHA256_ARM64="731db98e0e44e154fd7b760e9db85abf3176691c06e1165e273396f8b901cbec"
 readonly CASAOS_CORE_SHA256_ARM7="5ff989ca60549ce656fd67b19a8ca42e6be49c4bae262a94c7b6f8f8cab1f3dc"
-readonly CASAOS_COMPAT_OVERLAY_SHA256="414da5c274f9d960417827f6ed4db6fbdbad1f05219b02c4bda7a683deb9443e"
+readonly CASAOS_COMPAT_OVERLAY_SHA256="6457f06e2ddfb744fb450ebfc7afb3bb9b2f58b89d5fc5759b14ce5c3f22a455"
 
 # REQUIREMENTS CONF PATH
 # Udevil
@@ -294,7 +294,7 @@ Check_Arch() {
         "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-Gateway/releases/download/v0.4.9-alpha4/linux-${TARGET_ARCH}-casaos-gateway-v0.4.9-alpha4.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-MessageBus/releases/download/v0.4.4-3-alpha2/linux-${TARGET_ARCH}-casaos-message-bus-v0.4.4-3-alpha2.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-UserService/releases/download/v0.4.8/linux-${TARGET_ARCH}-casaos-user-service-v0.4.8.tar.gz"
-"${CASA_DOWNLOAD_DOMAIN}alvins82/CasaOS-LocalStorage/releases/download/v0.4.26/linux-${TARGET_ARCH}-casaos-local-storage-v0.4.26.tar.gz"
+"${CASA_DOWNLOAD_DOMAIN}alvins82/CasaOS-LocalStorage/releases/download/v0.4.27/linux-${TARGET_ARCH}-casaos-local-storage-v0.4.27.tar.gz"
 "${CASAOS_RELEASE_BASE_URL}/linux-${TARGET_ARCH}-casaos-app-management-${CASAOS_APP_MANAGEMENT_VERSION}.tar.gz"
 "${CASAOS_RELEASE_BASE_URL}/linux-${TARGET_ARCH}-${CASAOS_CORE_PACKAGE_FILE_PREFIX}.tar.gz"
 "${CASA_DOWNLOAD_DOMAIN}IceWhaleTech/CasaOS-CLI/releases/download/v0.4.4-3-alpha1/linux-${TARGET_ARCH}-casaos-cli-v0.4.4-3-alpha1.tar.gz"

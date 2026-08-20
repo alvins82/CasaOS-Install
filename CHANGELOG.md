@@ -2,6 +2,21 @@
 
 All notable changes to the CasaOS fork installer are documented here.
 
+## [0.4.37] - 2026-08-20
+
+### Changed
+
+- Bump CasaOS LocalStorage to `v0.4.27` (commit `3d66a74`), which restores all persisted mergerfs mounts during the before-docker `casaos-local-storage-first` init step so `/DATA` is ready before Docker starts, closing the boot window that left user apps unable to start.
+- Bump CasaOS AppManagement to `v0.4.18` (commit `9462e3a`), which adds a periodic recovery sweep that starts apps left `exited` because merged storage was not mounted yet at boot and writes stop markers so apps the user explicitly stopped are never started back.
+- Republish the CasaOS core packages and the compatibility overlay with the matching `v0.4.37` release marker.
+
+### Verification
+
+- The republished core tarballs are byte-identical to the v0.4.36 release assets (digests verified against the installer’s embedded constants and the v0.4.36 checksum manifest).
+- The AppManagement `v0.4.18` packages are cross-compiled for amd64, arm64, and arm/v7 with the same static build settings; the tarball layout matches the v0.4.17 packages file for file.
+- The v0.4.37 overlay differs from the v0.4.36 overlay only in the `fork-release` marker; the LocalStorage and AppManagement setup scripts are unchanged between the component versions.
+- The LocalStorage `v0.4.27` assets were published by the `alvins82/CasaOS-LocalStorage` release workflow from tag `v0.4.27`.
+
 ## [0.4.36] - 2026-08-20
 
 ### Changed
